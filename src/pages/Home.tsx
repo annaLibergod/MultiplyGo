@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
-  const startLevel = (levelId: number) => {
+  const startLevel = (levelId: string) => {
     navigate(`/level/${levelId}`);
   };
   const levels = [
@@ -30,10 +30,6 @@ function Home() {
     {
       id: "0-8",
       name: "0-8",
-    },
-    {
-      id: "0-9",
-      name: "0-9",
     },
     {
       id: "0-10",
