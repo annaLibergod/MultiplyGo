@@ -9,10 +9,9 @@ function QuestionCard({ question }: QuestionCardProps) {
     <div className="question-card">
       <h2>
         {question.firstNumber} {question.operation === "multiply" ? "×" : "÷"}{" "}
-        {question.secondNumber} ={question.answer}
+        {question.secondNumber} ={" "}
+        <input className="numberInput" type="number" />
       </h2>
-
-      <input type="number" />
     </div>
   );
 }
