@@ -204,6 +204,17 @@ input[type="number"] {
   width: 40px;
   height: 30px;
   font-size: 20px;
+  border-radius: 2px;
+  border-width: 1px;
+}
+
+.correct{
+  background-color: #22ec2c;
+}
+
+.incorrect{
+  background-color: #eb384a;
+
 }
 
 

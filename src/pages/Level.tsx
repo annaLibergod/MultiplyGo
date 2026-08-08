@@ -96,6 +96,8 @@ function Level() {
         });
       }
     }
+    console.log("NEW QUESTIONS", questions);
+
     return questions;
   };
 
@@ -103,6 +105,33 @@ function Level() {
     generateQuestions(),
   );
 
+  const [answers, setAnswers] = useState<(boolean | null)[]>(
+    Array(questionsPerPage).fill(null),
+  );
+
+  function handleAnswer(index: number, isCorrect: boolean): void {
+    let allCorrect;
+    setAnswers((previousAnswers) => {
+      const newAnswers = [...previousAnswers];
+      newAnswers[index] = isCorrect;
+
+      allCorrect = newAnswers.every((answer) => answer === true);
+
+      return newAnswers;
+    });
+    if (allCorrect) {
+      setGameCompleted(true);
+    }
+  }
+  const [gameCompleted, setGameCompleted] = useState(false);
+  useEffect(() => {
+    if (gameCompleted) {
+      generateQuestions();
+      setAnswers([null, null, null, null]);
+      console.log("here");
+      setGameCompleted(false);
+    }
+  }, [gameCompleted]);
   return (
     <>
       <button id="button-go-back" onClick={() => navigate("/")}>
@@ -110,7 +139,11 @@ function Level() {
       </button>
       <p>Game {currentLevel.id} </p>
       {currentQuestions.map((question, index) => (
-        <QuestionCard key={index} question={question} />
+        <QuestionCard
+          key={index}
+          question={question}
+          onAnswer={(isCorrect) => handleAnswer(index, isCorrect)}
+        />
       ))}
     </>
   );
