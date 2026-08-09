@@ -63,6 +63,8 @@ function Level() {
 
   const currentLevel = levels.find((level) => level.id === String(levelId));
 
+  const [gameId, setGameId] = useState(0);
+
   const generateQuestions = () => {
     const questions: Question[] = [];
 
@@ -96,8 +98,6 @@ function Level() {
         });
       }
     }
-    console.log("NEW QUESTIONS", questions);
-
     return questions;
   };
 
@@ -128,8 +128,10 @@ function Level() {
     if (gameCompleted) {
       generateQuestions();
       setAnswers([null, null, null, null]);
-      console.log("here");
       setGameCompleted(false);
+      const timer = setTimeout(() => {
+        setGameId((prev) => prev + 1);
+      }, 1000);
     }
   }, [gameCompleted]);
   return (
@@ -140,7 +142,7 @@ function Level() {
       <p>Game {currentLevel.id} </p>
       {currentQuestions.map((question, index) => (
         <QuestionCard
-          key={index}
+          key={`${gameId}-${index}`}
           question={question}
           onAnswer={(isCorrect) => handleAnswer(index, isCorrect)}
         />
