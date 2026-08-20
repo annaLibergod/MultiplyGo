@@ -20,7 +20,7 @@ function QuestionCard({ question, onAnswer }: QuestionCardProps) {
   return (
     <div className="question-card">
       <h2>
-        {question.firstNumber} {question.operation === "multiply" ? "×" : "÷"}{" "}
+        {question.firstNumber} {question.operation === "multiply" ? "×" : ":"}{" "}
         {question.secondNumber} ={" "}
         <input
           className={`numberInput ${
