@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+
 import "../App.css";
+
 import { useNavigate, useParams } from "react-router-dom";
+
 import QuestionCard from "../components/QuestionCard";
 
 type Level = {
@@ -46,13 +49,16 @@ const levels: Level[] = [
     maxFirstNumber: 10,
   },
 ];
-const questionsPerPage: number = 4;
+
+const questionsPerPage = 4;
+
 export type Question = {
   firstNumber: number;
   secondNumber: number;
   operation: "multiply" | "divide";
   answer: number;
 };
+
 export function getRandomNumber(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -63,39 +69,46 @@ function Level() {
 
   const currentLevel = levels.find((level) => level.id === String(levelId));
 
-  if (!currentLevel) {
-    return <div>Level not found</div>;
-  }
-
   const [gameId, setGameId] = useState(0);
 
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
 
-  const generateQuestions = () => {
+  const [answers, setAnswers] = useState<(boolean | null)[]>(
+    Array(questionsPerPage).fill(null),
+  );
+
+  const [gameCompleted, setGameCompleted] = useState(false);
+
+  function generateQuestions() {
+    if (!currentLevel) {
+      return;
+    }
+
     const questions: Question[] = [];
 
     for (let i = 0; i < questionsPerPage; i++) {
       const operation = Math.random() < 0.5 ? "multiply" : "divide";
+
       if (operation === "multiply") {
-        const firstNumber: number = getRandomNumber(
-          0,
-          currentLevel.maxFirstNumber,
-        );
-        const secondNumber: number = getRandomNumber(0, 10);
-        const answer: number = firstNumber * secondNumber;
+        const firstNumber = getRandomNumber(0, currentLevel.maxFirstNumber);
+
+        const secondNumber = getRandomNumber(0, 10);
+
+        const answer = firstNumber * secondNumber;
+
         questions.push({
-          firstNumber: firstNumber,
-          secondNumber: secondNumber,
+          firstNumber,
+          secondNumber,
           operation: "multiply",
-          answer: answer,
+          answer,
         });
       } else {
-        const firstNumber: number = getRandomNumber(
-          1,
-          currentLevel.maxFirstNumber,
-        );
-        const secondNumber: number = getRandomNumber(0, 10);
-        const answer: number = firstNumber * secondNumber;
+        const firstNumber = getRandomNumber(1, currentLevel.maxFirstNumber);
+
+        const secondNumber = getRandomNumber(0, 10);
+
+        const answer = firstNumber * secondNumber;
+
         questions.push({
           firstNumber: answer,
           secondNumber: firstNumber,
@@ -104,51 +117,65 @@ function Level() {
         });
       }
     }
+
     setCurrentQuestions(questions);
-    return questions;
-  };
+  }
 
-  useState(() => generateQuestions());
-
-  const [answers, setAnswers] = useState<(boolean | null)[]>(
-    Array(questionsPerPage).fill(null),
-  );
+  // Первая генерация вопросов
+  useEffect(() => {
+    generateQuestions();
+  }, [levelId]);
 
   function handleAnswer(index: number, isCorrect: boolean): void {
-    let allCorrect;
     setAnswers((previousAnswers) => {
       const newAnswers = [...previousAnswers];
-      newAnswers[index] = isCorrect;
 
-      allCorrect = newAnswers.every((answer) => answer === true);
+      newAnswers[index] = isCorrect;
 
       return newAnswers;
     });
+  }
+
+  // Проверяем, правильно ли решены все 4 примера
+  useEffect(() => {
+    const allCorrect = answers.every((answer) => answer === true);
+
     if (allCorrect) {
       setGameCompleted(true);
     }
-  }
-  const [gameCompleted, setGameCompleted] = useState(false);
-  useEffect(() => {
-    if (gameCompleted) {
-      generateQuestions();
-      setAnswers([null, null, null, null]);
-      setGameCompleted(false);
+  }, [answers]);
 
-      // timer
-      //
-      //
-      const timer = setTimeout(() => {
-        setGameId((prev) => prev + 1);
-      }, 1000);
+  // Начинаем новую игру после небольшой паузы
+  useEffect(() => {
+    if (!gameCompleted) {
+      return;
     }
+
+    const timer = setTimeout(() => {
+      generateQuestions();
+
+      setAnswers(Array(questionsPerPage).fill(null));
+
+      setGameId((previousGameId) => previousGameId + 1);
+
+      setGameCompleted(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, [gameCompleted]);
+
+  if (!currentLevel) {
+    return <div>Level not found</div>;
+  }
+
   return (
     <>
       <button id="button-go-back" onClick={() => navigate("/")}>
         X
       </button>
-      <p>Game {currentLevel.id} </p>
+
+      <p>Game {currentLevel.id}</p>
+
       {currentQuestions.map((question, index) => (
         <QuestionCard
           key={`${gameId}-${index}`}
