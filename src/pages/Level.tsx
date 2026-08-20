@@ -63,6 +63,10 @@ function Level() {
 
   const currentLevel = levels.find((level) => level.id === String(levelId));
 
+  if (!currentLevel) {
+    return <div>Level not found</div>;
+  }
+
   const [gameId, setGameId] = useState(0);
 
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
@@ -130,9 +134,13 @@ function Level() {
       generateQuestions();
       setAnswers([null, null, null, null]);
       setGameCompleted(false);
-      //const timer = setTimeout(() => {
-      setGameId((prev) => prev + 1);
-      //}, 1000);
+
+      // timer
+      //
+      //
+      const timer = setTimeout(() => {
+        setGameId((prev) => prev + 1);
+      }, 1000);
     }
   }, [gameCompleted]);
   return (
