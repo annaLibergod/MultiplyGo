@@ -65,6 +65,8 @@ function Level() {
 
   const [gameId, setGameId] = useState(0);
 
+  const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
+
   const generateQuestions = () => {
     const questions: Question[] = [];
 
@@ -98,12 +100,11 @@ function Level() {
         });
       }
     }
+    setCurrentQuestions(questions);
     return questions;
   };
 
-  const [currentQuestions, setCurrentQuestions] = useState<Question[]>(() =>
-    generateQuestions(),
-  );
+  useState(() => generateQuestions());
 
   const [answers, setAnswers] = useState<(boolean | null)[]>(
     Array(questionsPerPage).fill(null),
@@ -129,9 +130,9 @@ function Level() {
       generateQuestions();
       setAnswers([null, null, null, null]);
       setGameCompleted(false);
-      const timer = setTimeout(() => {
-        setGameId((prev) => prev + 1);
-      }, 1000);
+      //const timer = setTimeout(() => {
+      setGameId((prev) => prev + 1);
+      //}, 1000);
     }
   }, [gameCompleted]);
   return (
