@@ -35,10 +35,15 @@
   }
 
   background-color: #fff;
-  background-image:
+  /* background-image:
     linear-gradient(#d9e6ef 1px, transparent 1px),
     linear-gradient(90deg, #d9e6ef 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-size: 24px 24px; */
+
+  background-image:
+    linear-gradient(#43a6ed 1px, transparent 1px),
+    linear-gradient(90deg, #4aadf3 1px, transparent 1px);
+  background-size: 34px 34px;
 }
 
 #next-steps {
