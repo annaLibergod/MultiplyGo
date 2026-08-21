@@ -6,7 +6,7 @@ function Home() {
   const startLevel = (levelId: string) => {
     navigate(`/level/${levelId}`);
   };
-  const levels: Level[] = [
+  const levels = [
     {
       id: "0-3",
       name: "0-3",
