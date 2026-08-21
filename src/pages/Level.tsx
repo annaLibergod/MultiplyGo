@@ -125,7 +125,7 @@ function Level() {
           currentLevel.maxFirstNumber,
         );
 
-        const secondNumber = getRandomNumber(0, 10);
+        const secondNumber = getRandomNumber(currentLevel.minNumber, 10);
 
         const answer = firstNumber * secondNumber;
 
