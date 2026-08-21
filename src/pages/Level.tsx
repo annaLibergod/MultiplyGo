@@ -10,6 +10,7 @@ type Level = {
   id: string;
   name: string;
   maxFirstNumber: number;
+  minNumber: number;
 };
 
 const levels: Level[] = [
@@ -17,36 +18,49 @@ const levels: Level[] = [
     id: "0-3",
     name: "0-3",
     maxFirstNumber: 3,
+    minNumber: 0,
   },
   {
     id: "0-4",
     name: "0-4",
     maxFirstNumber: 4,
+    minNumber: 0,
   },
   {
     id: "0-5",
     name: "0-5",
     maxFirstNumber: 5,
+    minNumber: 0,
   },
   {
-    id: "0-6",
-    name: "0-6",
+    id: "2-6",
+    name: "2-6",
     maxFirstNumber: 6,
+    minNumber: 2,
   },
   {
-    id: "0-7",
-    name: "0-7",
+    id: "3-7",
+    name: "3-7",
     maxFirstNumber: 7,
+    minNumber: 3,
   },
   {
-    id: "0-8",
-    name: "0-8",
+    id: "3-8",
+    name: "3-8",
     maxFirstNumber: 8,
+    minNumber: 3,
   },
   {
-    id: "0-10",
-    name: "0-10",
+    id: "7-9",
+    name: "7-9",
+    maxFirstNumber: 9,
+    minNumber: 7,
+  },
+  {
+    id: "3-10",
+    name: "3-10",
     maxFirstNumber: 10,
+    minNumber: 4,
   },
 ];
 
@@ -90,9 +104,12 @@ function Level() {
       const operation = Math.random() < 0.5 ? "multiply" : "divide";
 
       if (operation === "multiply") {
-        const firstNumber = getRandomNumber(0, currentLevel.maxFirstNumber);
+        const firstNumber = getRandomNumber(
+          currentLevel.minNumber,
+          currentLevel.maxFirstNumber,
+        );
 
-        const secondNumber = getRandomNumber(0, 10);
+        const secondNumber = getRandomNumber(currentLevel.minNumber, 10);
 
         const answer = firstNumber * secondNumber;
 
@@ -103,7 +120,10 @@ function Level() {
           answer,
         });
       } else {
-        const firstNumber = getRandomNumber(1, currentLevel.maxFirstNumber);
+        const firstNumber = getRandomNumber(
+          currentLevel.minNumber === 0 ? 1 : currentLevel.minNumber,
+          currentLevel.maxFirstNumber,
+        );
 
         const secondNumber = getRandomNumber(0, 10);
 
@@ -121,7 +141,6 @@ function Level() {
     setCurrentQuestions(questions);
   }
 
-  // Первая генерация вопросов
   useEffect(() => {
     generateQuestions();
   }, [levelId]);
@@ -136,7 +155,6 @@ function Level() {
     });
   }
 
-  // Проверяем, правильно ли решены все 4 примера
   useEffect(() => {
     const allCorrect = answers.every((answer) => answer === true);
 
@@ -145,7 +163,6 @@ function Level() {
     }
   }, [answers]);
 
-  // Начинаем новую игру после небольшой паузы
   useEffect(() => {
     if (!gameCompleted) {
       return;
