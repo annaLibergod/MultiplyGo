@@ -14,16 +14,16 @@ function Home() {
       minNumber: 0,
     },
     {
-      id: "0-4",
-      name: "0-4",
+      id: "2-4",
+      name: "2-4",
       maxFirstNumber: 4,
-      minNumber: 0,
+      minNumber: 2,
     },
     {
-      id: "0-5",
-      name: "0-5",
+      id: "2-5",
+      name: "2-5",
       maxFirstNumber: 5,
-      minNumber: 0,
+      minNumber: 2,
     },
     {
       id: "2-6",
